@@ -1,0 +1,129 @@
+---
+version: '3.7'
+  
+services:
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    ports:
+        - 27017:27017
+    volumes:
+        - ./mongo:/data/db
+    environment:
+        - MONGO_INITDB_ROOT_USERNAME=rem
+        - MONGO_INITDB_ROOT_PASSWORD=rem2023
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    restart: always
+    ports:
+        - 8081:8081
+    environment:
+        - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+        - ME_CONFIG_MONGODB_ADMINUSERNAME=rem
+        - ME_CONFIG_MONGODB_ADMINPASSWORD=rem2023
+        - ME_CONFIG_MONGODB_PORT=27017
+        - ME_CONFIG_MONGODB_SERVER=mongo
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  broker:
+    image: confluentinc/cp-kafka:7.3.0
+    container_name: broker
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+
+  account_service:
+    build: ./account_service
+    image: account_service
+    ports:
+        - 3001:3001
+    container_name: account_service
+    restart: always
+    environment:
+        JWT_SECRET: 1kZDnw8==jh
+        KAFKA_CLIENTID: rem-kafka
+        KAFKA_BROKER_PORT: 9092
+        KAFKA_BROKER_HOST: broker
+        ADMIN_EMAIL: gui.acassemiro@gmail.com
+        PORT: 3001
+        MONGO_HOST: mongo
+        MONGO_PORT: 27017
+        MONGO_DB_NAME: 'rem'
+        MONGO_PASS: 'rem2023'
+        MONGO_USER: 'rem'
+
+  measures_service:
+    build: ./measures_service
+    image: measures_service
+    ports:
+        - 3002:3002
+    container_name: measures_service
+    restart: always
+    environment:
+        JWT_SECRET: 1kZDnw8==jh
+        KAFKA_CLIENTID: rem-kafka
+        KAFKA_BROKER_PORT: 9092
+        KAFKA_BROKER_HOST: broker
+        PORT: 3002
+        MONGO_HOST: mongo
+        MONGO_PORT: 27017
+        MONGO_DB_NAME: 'rem'
+        MONGO_PASS: 'rem2023'
+        MONGO_USER: 'rem'
+  
+  sensor_service:
+    build: ./sensor_service
+    image: sensor_service
+    ports:
+        - 3003:3003
+    container_name: sensor_service
+    restart: always
+    environment:
+        JWT_SECRET: 1kZDnw8==jh
+        KAFKA_CLIENTID: rem-kafka
+        KAFKA_BROKER_PORT: 9092
+        KAFKA_BROKER_HOST: broker
+        PORT: 3003
+        MONGO_HOST: mongo
+        MONGO_PORT: 27017
+        MONGO_DB_NAME: 'rem'
+        MONGO_PASS: 'rem2023'
+        MONGO_USER: 'rem'
+    
+  receive_data_service:
+    build: ./receive_data_service
+    image: receive_data_service
+    ports:
+        - 3004:3004
+    container_name: receive_data_service
+    restart: always
+    environment:
+        JWT_SECRET: 1kZDnw8==jh
+        KAFKA_CLIENTID: rem-kafka
+        KAFKA_BROKER_PORT: 9092
+        KAFKA_BROKER_HOST: broker
+        PORT: 3004
+        MONGO_HOST: mongo
+        MONGO_PORT: 27017
+        MONGO_DB_NAME: 'rem'
+        MONGO_PASS: 'rem2023'
+        MONGO_USER: 'rem'
+  
