@@ -132,7 +132,7 @@ services:
     build: ./device_service
     image: device_service
     ports:
-        - 3004:3004
+        - 3005:3005
     container_name: device_service
     restart: always
     environment:
