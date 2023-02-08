@@ -129,11 +129,11 @@ services:
         MONGO_USER: 'rem'
 
   device_service:
-    build: ./receive_data_service
-    image: receive_data_service
+    build: ./device_service
+    image: device_service
     ports:
         - 3004:3004
-    container_name: receive_data_service
+    container_name: device_service
     restart: always
     environment:
         JWT_SECRET: 1kZDnw8==jh
