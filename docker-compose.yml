@@ -51,6 +51,18 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
 
+  api_gateway_service:
+    build: ./api_gateway_service
+    image: api_gateway_service
+    ports:
+        - 8000:8000
+    container_name: api_gateway_service
+    restart: always
+    environment:
+        JWT_SECRET: 1kZDnw8==jh
+        API_DOC_ENV: dev
+        PORT: 8000
+    
   account_service:
     build: ./account_service
     image: account_service
