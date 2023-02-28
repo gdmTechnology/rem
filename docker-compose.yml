@@ -158,7 +158,7 @@ services:
         MONGO_DB_NAME: 'rem'
         MONGO_PASS: 'rem2023'
         MONGO_USER: 'rem'
-
+      
   actuator_service:
     build: ./actuator_service
     image: actuator_service
@@ -177,4 +177,3 @@ services:
         MONGO_DB_NAME: 'rem'
         MONGO_PASS: 'rem2023'
         MONGO_USER: 'rem'
-  
