@@ -50,6 +50,17 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+   
+   mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    volumes:
+      - ./config:/mosquitto/config
+      - ./data:/mosquitto/data
+      - ./log:/mosquitto/log
+    ports:
+      - '1883:1883'
+    restart: always
 
   api_gateway_service:
     build: ./api_gateway_service
