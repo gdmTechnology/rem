@@ -194,7 +194,6 @@ services:
     image: broker_mqtt_service
     ports:
         - 3007:3007
-        - 1883:1883
     container_name: broker_mqtt_service
     restart: always
     environment:
