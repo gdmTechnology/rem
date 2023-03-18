@@ -51,6 +51,17 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
 
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    volumes:
+      - ./config:/mosquitto/config
+      - ./data:/mosquitto/data
+      - ./log:/mosquitto/log
+    ports:
+      - '1883:1883'
+    restart: always
+
   api_gateway_service:
     build: ./api_gateway_service
     image: api_gateway_service
@@ -177,12 +188,13 @@ services:
         MONGO_DB_NAME: 'rem'
         MONGO_PASS: 'rem2023'
         MONGO_USER: 'rem'
-
+  
   broker_mqtt_service:
     build: ./broker_mqtt_service
     image: broker_mqtt_service
     ports:
         - 3007:3007
+        - 1883:1883
     container_name: broker_mqtt_service
     restart: always
     environment:
@@ -196,3 +208,6 @@ services:
         MONGO_DB_NAME: 'rem'
         MONGO_PASS: 'rem2023'
         MONGO_USER: 'rem'
+        MQTT_BROKER_PORT: 1883
+        MQTT_PUBLISHER_CLIENTID: mqttclient
+        KAFKA_GROUP_ID: measures-service
