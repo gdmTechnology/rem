@@ -1,0 +1,81 @@
+---
+version: '3.7'
+  
+services:
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    ports:
+        - 27017:27017
+    volumes:
+        - ./mongo:/data/db
+    environment:
+        - MONGO_INITDB_ROOT_USERNAME=rem
+        - MONGO_INITDB_ROOT_PASSWORD=rem2023
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    restart: always
+    ports:
+        - 8081:8081
+    environment:
+        - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+        - ME_CONFIG_MONGODB_ADMINUSERNAME=rem
+        - ME_CONFIG_MONGODB_ADMINPASSWORD=rem2023
+        - ME_CONFIG_MONGODB_PORT=27017
+        - ME_CONFIG_MONGODB_SERVER=mongo
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  broker:
+    image: confluentinc/cp-kafka:7.3.0
+    container_name: broker
+    ports:
+      - "9092:9092"
+      - "9094:9094"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,INSIDE://broker:9092,OUTSIDE://localhost:9094
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    volumes:
+      - ./config:/mosquitto/config
+      - ./data:/mosquitto/data
+      - ./log:/mosquitto/log
+    ports:
+      - '1883:1883'
+    restart: always
+
+  jenkins:
+    image: jenkins/jenkins:lts-jdk11
+    container_name: jenkins
+    privileged: true
+    user: root
+    ports:
+      - 8081:8080
+      - 50000:50000
+    environment:
+      - DOCKER_HOST=tcp://docker:2376
+      - DOCKER_CERT_PATH=/certs/client
+      - DOCKER_TLS_VERIFY=1
+      - JENKINS_HOME=/var/jenkins_home
+    volumes:
+      - /var/jenkins/caches:/var/jenkins/caches
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/jenkins_home:/var/jenkins_home
