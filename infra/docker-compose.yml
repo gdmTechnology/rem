@@ -62,5 +62,6 @@ services:
       - '1883:1883'
     restart: always
 
-  networks:
-    default:
+networks:
+  rem_network:
+    driver: bridge
