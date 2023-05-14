@@ -63,5 +63,5 @@ services:
     restart: always
 
 networks:
-  rem_network:
-    driver: bridge
+  default:
+    name: test-network
