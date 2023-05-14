@@ -64,4 +64,4 @@ services:
 
 networks:
   default:
-    name: test-network
+    name: rem-network
