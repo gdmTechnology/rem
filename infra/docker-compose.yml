@@ -63,5 +63,5 @@ services:
     restart: always
 
   networks:
-    default:
+    rem:
       name: rem-network
