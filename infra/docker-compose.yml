@@ -64,4 +64,4 @@ services:
 
 networks:
   default:
-    name: rem-network
+    name: rem_network
