@@ -1,31 +1,31 @@
 ---
 version: '3.7'
-  
+
 services:
   mongo:
     image: mongo
     container_name: mongo
     restart: always
     ports:
-        - 27017:27017
+      - 27017:27017
     volumes:
-        - ./mongo:/data/db
+      - mongodata:/data/db
     environment:
-        - MONGO_INITDB_ROOT_USERNAME=rem
-        - MONGO_INITDB_ROOT_PASSWORD=rem2023
+      - MONGO_INITDB_ROOT_USERNAME=rem
+      - MONGO_INITDB_ROOT_PASSWORD=rem2023
 
   mongo-express:
     image: mongo-express
     container_name: mongo-express
     restart: always
     ports:
-        - 8081:8081
+      - 8081:8081
     environment:
-        - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
-        - ME_CONFIG_MONGODB_ADMINUSERNAME=rem
-        - ME_CONFIG_MONGODB_ADMINPASSWORD=rem2023
-        - ME_CONFIG_MONGODB_PORT=27017
-        - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=rem
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=rem2023
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_MONGODB_SERVER=mongo
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.0
@@ -62,6 +62,10 @@ services:
       - '1883:1883'
     restart: always
 
+volumes:
+  mongodata:
+
+
 networks:
   default:
-    name: rem_network
+    name: rem-network
