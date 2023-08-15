@@ -1,5 +1,3 @@
-Certainly! Here's the translated README for your repository:
-
 # Sensor Data Collection and Command Dispatch Project
 
 This repository contains a simple application for sensor data collection and command dispatch. The application utilizes an event-driven architecture, employing Kafka and MQTT technologies for communication with field devices. The project was developed following Test-Driven Development (TDD) and Domain-Driven Design (DDD) practices.
