@@ -25,7 +25,7 @@ Make sure you have Docker and Docker Compose installed on your system.
 1. Clone this repository:
 
 ```
-git clone https://github.com/Remote-Engine-Monitoring/rem.git
+https://github.com/gdmTechnology/rem.git
 ```
 
 2. Navigate to the project directory:
