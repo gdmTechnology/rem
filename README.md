@@ -34,7 +34,22 @@ git clone https://github.com/Remote-Engine-Monitoring/rem.git
 cd rem
 ```
 
-3. Run the `entrypoint.sh` script to start the services using Docker Compose:
+3. Run the `start.infra.sh` script to start the infra services using Docker Compose:
+
+```
+./start.infra.sh
+```
+
+In the third step, the execution of the start.infra.sh script is performed to initiate the essential infrastructure for the project. This script automates the configuration and start-up of the services required for the project. The infrastructure encompasses services and tools crucial for the proper functioning of the sensor data collection and command dispatch project. The addressed services include MongoDB, Kafka, and Mosquitto.
+
+The start.infra.sh script serves the following functions:
+
+Start MongoDB: Configure and initiate the MongoDB database, used to store and manage the data collected from sensors.
+Start Kafka: Configure and initiate a Kafka cluster, enabling the exchange of events among the various project services, following the event-driven architecture.
+Start Mosquitto: Configure and initiate the Mosquitto MQTT server, employed for communication with field devices using the MQTT protocol.
+The start.infra.sh script significantly simplifies the process of configuring and starting the infrastructure necessary for the application's proper operation. This proves particularly valuable when dealing with multiple services and dependencies that need simultaneous startup
+
+4. Run the `entrypoint.sh` script to start the services using Docker Compose:
 
 ```
 ./entrypoint.sh
